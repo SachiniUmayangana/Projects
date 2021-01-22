@@ -1,0 +1,245 @@
+create database techwave;
+use techwave;
+
+
+create table employee(
+	eId VARCHAR(10) NOT NULL,
+	title VARCHAR(20) NOT NULL,
+	name VARCHAR(50) NOT NULL,
+	address VARCHAR(50) NOT NULL,
+	contact VARCHAR(20) NOT NULL,
+	CONSTRAINT PRIMARY KEY( eid)
+);
+
+INSERT INTO employee
+	VALUES
+	('A001','Cashier','A.M Hansani Perera','No:102/A, Pannila, Beruwala','034-5526987'),
+	('A002','Clerk','R.M Amal Sanjeewa','No:73 Waduramulla, Panadura','077-5125887'),
+	('A003','Salesman','W.P Nirmala Mendis','No:11/A, Wadduwa','0755703021'),
+	('A004','Salesman','A Hansan Kanchuka','No:2/A, Pannila, Ambalangoda','034-5512387'),
+	('A005','Manager','R.A Saduni Deshani','No:12/A, Wadduwa','075575241');
+
+
+create table customer(
+	custId VARCHAR(40) NOT NULL,
+	name VARCHAR(40) NOT NULL,
+	address VARCHAR(50) NOT NULL,
+	contact VARCHAR(20) NOT NULL,
+	CONSTRAINT PRIMARY KEY(custId)	
+);
+
+INSERT INTO customer
+	VALUES
+	('C001','Q.A.Samantha','Galle','0518695412'),
+	('C002','M.Padmasiri','Colombo','0115623665'),
+	('C003','K.L.Lakmini','Panadura','077596824'),
+	('C004','Siripala','Galle','0115692485'),
+	('C005','Jinadasa','Panadura','0115692485'),
+	('C006','Sepalika','Kalutara','0115692485'),
+	('C007','Jinasena','Ambalangoda','0115692485'),
+	('C008','Somadasa','Baddegama','0115692485'),
+	('C009','Danasiri','Moratuwa','0115692485'),
+	('C010','Somasiri','Kandy','0115692485');
+
+
+create table orders(
+	orderId VARCHAR(10) NOT NULL,
+	orderDate DATE,
+	custId VARCHAR(40) NOT NULL,
+	CONSTRAINT PRIMARY KEY(orderId),
+	CONSTRAINT FOREIGN KEY(custId)
+		REFERENCES customer(custId)
+	ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+INSERT INTO orders VALUES ('D001','2019-9-20','C001');	
+INSERT INTO orders VALUES ('D002','2018-8-21','C002');
+INSERT INTO orders VALUES ('D003','2019-9-20','C003');
+INSERT INTO orders VALUES ('D004','2008-2-28','C004');
+INSERT INTO orders VALUES ('D005','2008-3-20','C005');
+INSERT INTO orders VALUES ('D006','2008-4-10','C006');
+INSERT INTO orders VALUES ('D007','2008-5-10','C007');
+INSERT INTO orders VALUES ('D008','2008-6-20','C008');
+INSERT INTO orders VALUES ('D009','2008-8-12','C009');
+INSERT INTO orders VALUES ('D010','2008-9-20','C010');
+
+
+create table product(
+	code VARCHAR(6),
+	name VARCHAR(100),
+	description VARCHAR(500),
+	colour VARCHAR(15),
+	unitPrice DECIMAL(10,2),
+	qtyOnHand INT(5),
+	CONSTRAINT PRIMARY KEY(code)
+);
+
+
+INSERT INTO product
+	VALUES
+	('P001','Samsung Galaxy Note 20','256 GB/12 GB RAM,3 Cameras','Bronze',260990.00,10),
+	('P002','Huawei Nova 5T','128 GB, 8 GB RAM','Black',69999.00,6),
+	('P003','Huawei Y5 ','32 GB, 2 GB RAM','Black',20999.00,3),
+	('P004','iPhone SE','64GB, 3GB','Black',121499.00,5),
+	('P005','DELL Inspiron 5584(S) ','8th Gen i7, 8GB RAM, 2TB,','Silver',161999.00,5),
+	('P006','DELL Inspiron 5584(B) ','8th Gen i7, 8GB RAM, 2TB,','Black',161999.00,3),
+	('P007','Asus ZenBook','Intel i7 4.9GHz, 8GB','Blue',211859.00,2),
+	('P008','HUAWEI MateBook 13','16GB RAM 512 GB PCIe SSD I5','Silver',220499.00,5),
+	('P009','Asus Gaming Laptop','i7, Up To 4.5 GHz, 8GB','Midnight Blue',278999.00,3),
+	('P0010','Dell G3 Gaming Laptop','9th Gen i5, Win 10, 4GB RAM','Black',181169.00,5),
+	('P0011','Asus Laptop 15','Intel i3 2.1GHz, 4GB RAM','Silver ',98999.00,6),
+	('P0012','Dell Inspiron 3593','10th Gen I3','Black',92699.00,10),
+	('P0013','Dell Inspiron 5593(S)','10th Gen I5','Silver',158849.00,5),
+	('P0014','Dell Inspiron 5593(B)','10th Gen I5','Midnight Blue',158849.00,8),
+	('P0015','Dell Inspiron 3580(S)','Intel Pentium, Win 10, 2.30GHz, 4GB RAM','Silver',64799.00,4),
+	('P0016','Dell Inspiron 3580(B)','Intel Pentium, Win 10, 2.30GHz, 4GB RAM','Black',64799.00,8),
+	('P0017','iPhone 6s Plus(B)','32GB','Silver',81699.00,5),
+	('P0018','iPhone 6s Plus(S)','32GB','Black',81699.00,6),
+	('P0019','Samsung Galaxy A80','8GB/128GB','Black',86390.00,5),
+	('P0020','Samsung Galaxy A70','8GB/128GB','Blue',65990.00,4);						
+
+
+CREATE TABLE OrderDetail(
+	orderId VARCHAR(6) NOT NULL,
+	itemCode VARCHAR(6) NOT NULL,
+	qty INT(11),
+	unitPrice DECIMAL(8,2),
+	CONSTRAINT PRIMARY KEY (orderId,itemCode),
+	CONSTRAINT FOREIGN KEY (orderId) REFERENCES Orders(orderId) on Delete Cascade on Update Cascade,
+	CONSTRAINT FOREIGN KEY (itemCode) REFERENCES product(code) on Delete Cascade on Update Cascade
+);
+
+
+INSERT INTO OrderDetail VALUES('D001','P001',1,260990.00);
+INSERT INTO OrderDetail VALUES('D002','P002',1,69999.00);
+INSERT INTO OrderDetail VALUES('D003','P001',1,260990.00);
+INSERT INTO OrderDetail VALUES('D004','P002',2,69999.00);
+INSERT INTO OrderDetail VALUES('D004','P005',1,161999.00);
+INSERT INTO OrderDetail VALUES('D005','P001',1,260990.00);
+INSERT INTO OrderDetail VALUES('D006','P003',1,20999.00);
+INSERT INTO OrderDetail VALUES('D006','P006',1,161999.00);
+INSERT INTO OrderDetail VALUES('D007','P020',1,65990.00);
+INSERT INTO OrderDetail VALUES('D008','P001',1,260990.00);
+INSERT INTO OrderDetail VALUES('D009','P002',1,69999.00);
+INSERT INTO OrderDetail VALUES('D010','P010',2,181169.00);
+
+
+
+
+create table supplier(
+	supId INT(5) NOT NULL,
+	name VARCHAR(50) NOT NULL,
+	address VARCHAR(20) NOT NULL,
+	contact VARCHAR(20) NOT NULL,	
+	CONSTRAINT PRIMARY KEY(supId)
+);
+
+INSERT INTO supplier
+	VALUES
+	(1,'Suranga','Kurunegala','0115263598'),
+	(2,'Prasanna','Rathnapura','0715896325'),
+	(3,'Ranjith','Colombo','0759862486'),
+	(4,'Kamal','Kandy','0778549652'),
+	(5,'Kulasooriya','PAnadura','0785632458');
+
+
+create table supplierDetail(
+	supId INT(5) NOT NULL,
+	itemCode VARCHAR(6) NOT NULL,
+	buyingPrice DECIMAL(10,2),
+	qty INT(10),
+	CONSTRAINT PRIMARY KEY(supId,itemCode),
+	CONSTRAINT FOREIGN KEY (supId)
+		REFERENCES supplier(supId)
+	ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT FOREIGN KEY (itemCode)
+		REFERENCES product(code)
+	ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+INSERT INTO supplierDetail
+VALUES
+();
+
+
+================================================================================
+create table attendance(
+	eid VARCHAR(10) NOT NULL,
+	etitle VARCHAR(20) NOT NULL,
+	ename VARCHAR(50) NOT NULL,
+	date DATE NOT NULL,
+	CONSTRAINT FOREIGN KEY(eid)
+		REFERENCES employee(eid)
+	ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+INSERT INTO attendance 
+	VALUES
+	('A001','Cashier','A.M Hansani Perera',);
+	(),
+	(),
+	(),
+	(),
+	(),
+	(),
+	(),
+	(),
+	(),
+	(),
+	(),
+	(),
+	(),
+	(),
+	(),
+	(),
+===================================================================================
+
+
+
+
+
+INSERT INTO product1
+	VALUES
+	('P001','Samsung Galaxy Note 20 Ultra','256 GB/12 GB RAM,3 Cameras','Bronze',260990.00,10),
+	('P002','','','','',''),
+	('P003','','','','',''),
+	('P004','','','','',''),
+	('P005','','','','',''),
+	('P006','','','','',''),
+	('P007','','','','',''),
+	('P008','','','','',''),
+	('P009','','','','',''),
+	('P0010','','','','',''),
+	('P0011,'','','','',''),
+	('P0012','','','','',''),
+	('P0013','','','','',''),
+	('P0014','','','','',''),
+	('P0015','','','','',''),
+	('P0016','','','','',''),
+	('P0017','','','','',''),
+	('P0018','','','','',''),
+	('P0019','','','','',''),
+	('P0020','','','','','');
+
+
+
+
+
+
+
+
+//===============================customer========================================================================================
+
+create table customer(
+	cid VARCHAR(10) NOT NULL,
+	ctitle VARCHAR(20) NOT NULL,
+	cname VARCHAR(50) NOT NULL,
+	caddress VARCHAR(50) NOT NULL,
+	CONSTRAINT PRIMARY KEY( cid)
+);
+
+
+
+
+
+ijsepro@gmail.com
